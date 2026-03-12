@@ -44,12 +44,3 @@ llm = ChatOpenAI(model="gpt-4o", temperature=0.3)
 embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
 
 logger.info("OpenAI clients initialised  (model: gpt-4o, embeddings: text-embedding-3-small)")
-
-
-# ── Optional: Resend for escalation emails ──────────────────
-#RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "")
-
-# if RESEND_API_KEY:
-#     logger.info("Resend API key found — escalation emails enabled")
-# else:
-#     logger.info("Resend API key not set — escalation emails will be simulated")
