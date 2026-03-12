@@ -149,6 +149,9 @@ ORDER_DATABASE: dict[str, dict] = {
     },
 }
 
+# Mutable queue — filled at runtime by escalate_to_human tool
+ESCALATION_QUEUE: list[dict] = []
+
 
 # ── Support Policies (injected into Support Agent prompt) ──────
 SUPPORT_POLICIES = """

@@ -16,7 +16,7 @@ import time
 
 from langchain_core.tools import tool
 
-#from src.config import RESEND_API_KEY, get_logger
+from src.data import ESCALATION_QUEUE
 from src.config import get_logger
 from src.data import ORDER_DATABASE
 from src.rag import product_vectorstore
@@ -40,33 +40,6 @@ def lookup_order_by_email(email: str) -> dict | None:
         if order["customer_email"].lower() == email_lower:
             return {"order_id": oid, **order}
     return None
-
-
-# def send_email(to: str, subject: str, body: str) -> str:
-#     """Send an email via Resend if configured, otherwise simulate."""
-#     if not RESEND_API_KEY:
-#         logger.info("Email simulated (no RESEND_API_KEY): to=%s subj=%r", to, subject)
-#         return f"Email simulated to {to} (Resend not configured)"
-
-    # try:
-    #     import resend
-    #     resend.api_key = RESEND_API_KEY
-    #     result = resend.Emails.send({
-    #         "from": "onboarding@resend.dev",
-    #         "to": [to],
-    #         "subject": f"[AxiomCart] {subject}",
-    #         "html": f"<div style='font-family:Arial;max-width:600px'>"
-    #                 f"<h2 style='color:#2563eb'>AxiomCart Support</h2><hr>"
-    #                 f"<p>{body}</p><hr>"
-    #                 f"<p style='color:#6b7280;font-size:12px'>AxiomCart Customer Support</p></div>",
-    #     })
-    #     email_id = result.get("id", "unknown") if isinstance(result, dict) else "sent"
-    #     logger.info("Email sent via Resend: to=%s id=%s", to, email_id)
-    #     return f"Email sent to {to} (ID: {email_id})"
-    # except Exception as exc:
-    #     logger.exception("Resend email failed")
-    #     return f"Email failed: {exc}"
-
 
 # ═══════════════════════════════════════════════════════════
 #  PRODUCT DISCOVERY TOOL
@@ -166,20 +139,6 @@ def escalate_to_human(order_id: str, issue_summary: str, priority: str = "normal
 
     response_times = {"urgent": "1 hour", "high": "4 hours", "normal": "24 hours", "low": "48 hours"}
 
-    # Optionally send email notification
-    # email_status = ""
-    # if customer_email != "Unknown":
-    #     email_status = _send_email(
-    #         to=customer_email,
-    #         subject=f"Support Ticket {ticket_id} — {priority.upper()} Priority",
-    #         body=(
-    #             f"Hi {customer_name},<br><br>"
-    #             f"We've created support ticket <b>{ticket_id}</b> for your issue:<br>"
-    #             f"<i>{issue_summary}</i><br><br>"
-    #             f"A support agent will contact you within {response_times.get(priority, '24 hours')}.<br>"
-    #             f"Thank you for your patience."
-    #         ),
-    #     )
 
     return (
         f"Escalation ticket created.\n"
