@@ -131,10 +131,28 @@ uv sync
 ```
 
 Or with pip:
-
 ```bash
 pip install -r requirements.txt
 ```
+
+> **Note for pip users:** Since you're not using `uv`, replace `uv run python` with just `python` in all the usage commands below. For example:
+>
+> ```bash
+> # Text mode
+> python -m src.main
+>
+> # Voice mode
+> python -m src.main --voice
+> ```
+>
+> It's also recommended to use a virtual environment:
+>
+> ```bash
+> python -m venv .venv
+> source .venv/bin/activate   # Linux/macOS
+> .venv\Scripts\activate      # Windows
+> pip install -r requirements.txt
+> ```
 
 **Core dependencies:**
 
