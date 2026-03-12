@@ -18,7 +18,7 @@ from langchain_core.tools import tool
 
 #from src.config import RESEND_API_KEY, get_logger
 from src.config import get_logger
-from src.data import ESCALATION_QUEUE, ORDER_DATABASE
+from src.data import ORDER_DATABASE
 from src.rag import product_vectorstore
 
 logger = get_logger("tools")
