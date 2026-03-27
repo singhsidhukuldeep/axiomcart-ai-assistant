@@ -3,8 +3,9 @@ Build and compile the LangGraph StateGraph.
 
 Graph topology:
 
-  START → orchestrator ─┬─ product_agent ──→ synthesizer → END
-                        └─ support_agent ──↗
+  START → orchestrator ─┬─ product_agent ─→ synthesizer → END
+                        ├─ support_agent ──↗
+                        └──────────────────↗ (fallback)
 
 Each agent is internally a subgraph with a model ⇄ tools loop.
 The MemorySaver checkpointer persists conversation history across
@@ -37,6 +38,14 @@ def build_graph() -> StateGraph:
     builder.add_edge(START, "orchestrator")
     builder.add_edge("synthesizer", END)
 
+    # Dynamic edges defined in src/nodes.py via Send() and Command():
+    # Send — dispatch to a node with a custom payload
+    # Command — update state and route to the next node
+    # L266: Send() — orchestrator dispatches to product_agent / support_agent
+    # L273: Send() — orchestrator fallback directly to synthesizer
+    # L307: Command(goto) — product_agent routes to synthesizer with results
+    # L337: Command(goto) — support_agent routes to synthesizer with results
+
     # ── Compile with checkpointer ────────────────────────
     # MemorySaver persists graph state so that interrupt()-based
     # HITL can pause and resume, and conversation history carries
@@ -45,6 +54,7 @@ def build_graph() -> StateGraph:
     graph = builder.compile(checkpointer=memory)
 
     logger.info("Graph compiled  (with MemorySaver for conversation persistence)")
+    # Print ASCII graph topology in terminal (requires `grandalf` package)
     try:
         print(graph.get_graph().draw_ascii())
     except ImportError as e:
