@@ -45,6 +45,10 @@ def build_graph() -> StateGraph:
     graph = builder.compile(checkpointer=memory)
 
     logger.info("Graph compiled  (with MemorySaver for conversation persistence)")
+    try:
+        print(graph.get_graph().draw_ascii())
+    except ImportError as e:
+        logger.debug(e)
     return graph
 
 
