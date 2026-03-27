@@ -61,7 +61,8 @@ class AxiomCartAssistant:
             config,
         )
 
-        # Handle HITL: interrupt() surfaces questions in __interrupt__
+        # Handle HITL (Human-in-the-Loop)
+        # interrupt() surfaces questions in __interrupt__
         while "__interrupt__" in result and result["__interrupt__"]:
             question = result["__interrupt__"][0].value
             logger.info("HITL interrupt: %r", question)
