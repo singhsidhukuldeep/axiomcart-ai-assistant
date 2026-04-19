@@ -89,6 +89,7 @@ def get_order_status(identifier: str) -> str:
             return f"No order found for email: {identifier}"
     else:
         oid = normalise_order_id(identifier)
+        logger.info("get_order_status  normalise_order_id output=%r", oid)
         order = ORDER_DATABASE.get(oid)
         if not order:
             return f"Order {oid} not found. Please verify the order ID."

@@ -116,6 +116,7 @@ class AxiomCartAssistant:
             if transcript.lower().strip() in ("goodbye", "bye", "quit", "exit", "thank you"):
                 self.speaker.speak("Goodbye! Have a great day.")
                 break
+            transcript += "\n Keep the response very, very short. "
             print(f"\nYou: {transcript}")
             answer = self.query(transcript)
             print(f"Assistant: {answer}\n")
