@@ -56,8 +56,10 @@ def build_graph() -> StateGraph:
     logger.info("Graph compiled  (with MemorySaver for conversation persistence)")
     # Print ASCII graph topology in terminal (requires `grandalf` package)
     try:
+        logger.info("Graph structure: ")
         print(graph.get_graph().draw_ascii())
     except ImportError as e:
+        logger.info("Error while printing the graph: ")
         logger.debug(e)
     return graph
 
