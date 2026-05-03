@@ -16,3 +16,7 @@ numpy>=1.26
 # Config
 python-dotenv>=1.0
 pydantic>=2.0
+
+# Graph Visualization
+grandalf>=0.8
+
