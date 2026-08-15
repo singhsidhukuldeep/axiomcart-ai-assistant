@@ -38,13 +38,14 @@ def build_graph() -> StateGraph:
     builder.add_edge(START, "orchestrator")
     builder.add_edge("synthesizer", END)
 
-    # Dynamic edges defined in src/nodes.py via Send() and Command():
-    # Send — dispatch to a node with a custom payload
-    # Command — update state and route to the next node
-    # L266: Send() — orchestrator dispatches to product_agent / support_agent
-    # L273: Send() — orchestrator fallback directly to synthesizer
-    # L307: Command(goto) — product_agent routes to synthesizer with results
-    # L337: Command(goto) — support_agent routes to synthesizer with results
+    # Dynamic edges defined in src/nodes.py — every node returns Command(goto=...):
+    # Send — a target node plus the exact input dict it will receive
+    # Command — updates shared state; its goto tells the engine what to run next
+    # L266: orchestrator builds one Send per task (product_agent / support_agent)
+    # L273: zero tasks — fallback Send straight to synthesizer
+    # L282: Command(goto=targets) — the return that actually dispatches the Sends above
+    # L307: product_agent returns Command(goto="synthesizer") with its results
+    # L337: support_agent returns Command(goto="synthesizer") with its results
 
     # ── Compile with checkpointer ────────────────────────
     # MemorySaver persists graph state so that interrupt()-based
